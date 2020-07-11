@@ -4,7 +4,7 @@ import { logger } from '../config/logger.js';
 const create = async (req, res) => {
   try {
     const grade = await gradeModel.create(req.body)
-    if (grade) res.status(400).send({erro: 'elementos inválidos'})
+    if (!grade) res.status(400).send({erro: 'elementos inválidos'})
     res.send(grade);
     logger.info(`POST /grade - ${JSON.stringify(Sucess)}`);
 
@@ -27,7 +27,7 @@ const findAll = async (req, res) => {
 
   try {
     const grade = await gradeModel.find(condition)
-    if (grade) res.status(400).send({ erro: "elementos inválidos" });
+    if (!grade) res.status(400).send({ erro: "elementos inválidos" });
     res.send(grade);
     logger.info(`GET /grade`);
 
@@ -44,7 +44,7 @@ const findOne = async (req, res) => {
 
   try {
     const grade = await gradeModel.findOne({_id: id})
-    if (grade) res.status(400).send({ erro: "elementos inválidos" });
+    if (!grade) res.status(400).send({ erro: "elementos inválidos" });
     res.send(grade);
     logger.info(`GET /grade - ${id}`);
 
