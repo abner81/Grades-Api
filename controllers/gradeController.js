@@ -1,10 +1,13 @@
-import { db } from '../models/index.js';
+import {gradeModel} from '../models/gradesModel.js';
 import { logger } from '../config/logger.js';
 
 const create = async (req, res) => {
   try {
-    res.send();
-    logger.info(`POST /grade - ${JSON.stringify()}`);
+    const grade = await gradeModel.create(req.body)
+    if (grade) res.status(400).send({erro: 'elementos inválidos'})
+    res.send(grade);
+    logger.info(`POST /grade - ${JSON.stringify(Sucess)}`);
+
   } catch (error) {
     res
       .status(500)
@@ -22,8 +25,11 @@ const findAll = async (req, res) => {
     : {};
 
   try {
-    res.send();
+    const grade = await gradeModel.find(condition)
+    if (grade) res.status(400).send({ erro: "elementos inválidos" });
+    res.send(grade);
     logger.info(`GET /grade`);
+
   } catch (error) {
     res
       .status(500)
@@ -36,9 +42,11 @@ const findOne = async (req, res) => {
   const id = req.params.id;
 
   try {
-    res.send();
-
+    const grade = await gradeModel.findOne({_id: id})
+    if (grade) res.status(400).send({ erro: "elementos inválidos" });
+    res.send(grade);
     logger.info(`GET /grade - ${id}`);
+
   } catch (error) {
     res.status(500).send({ message: 'Erro ao buscar o Grade id: ' + id });
     logger.error(`GET /grade - ${JSON.stringify(error.message)}`);
@@ -55,9 +63,10 @@ const update = async (req, res) => {
   const id = req.params.id;
 
   try {
+    await gradeModel.updateOne({_id: id}, req.body)
     res.send({ message: 'Grade atualizado com sucesso' });
-
     logger.info(`PUT /grade - ${id} - ${JSON.stringify(req.body)}`);
+
   } catch (error) {
     res.status(500).send({ message: 'Erro ao atualizar a Grade id: ' + id });
     logger.error(`PUT /grade - ${JSON.stringify(error.message)}`);
@@ -68,6 +77,7 @@ const remove = async (req, res) => {
   const id = req.params.id;
 
   try {
+    await gradeModel.findOneAndDelete({_id: id})
     res.send({ message: 'Grade excluido com sucesso' });
 
     logger.info(`DELETE /grade - ${id}`);
@@ -80,9 +90,9 @@ const remove = async (req, res) => {
 };
 
 const removeAll = async (req, res) => {
-  const id = req.params.id;
 
   try {
+    await gradeModel.deleteMany({})
     res.send({
       message: `Grades excluidos`,
     });

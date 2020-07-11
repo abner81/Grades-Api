@@ -4,11 +4,13 @@ import cors from 'cors';
 
 import { gradeRouter } from './routes/gradeRouter.js';
 import { logger } from './config/logger.js';
-import { db } from './models/index.js';
+import mongoose from 'mongoose'
+
+
 
 (async () => {
   try {
-    await db.mongoose.connect(db.url, {
+    await mongoose.connect(process.env.MONGODB, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
@@ -23,7 +25,7 @@ import { db } from './models/index.js';
 const app = express();
 
 //define o dominio de origem para consumo do servico
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
   cors({
